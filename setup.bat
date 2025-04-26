@@ -59,7 +59,7 @@ IF NOT !ERRORLEVEL! EQU 0 (
 
 echo.
 echo Setup completed successfully!
-echo The executable can be found in the dist folder as 'FileOrganizer.exe'
+echo The executable can be found in the dist folder as FileOrganizer-%OS:~0,3%-%PROCESSOR_ARCHITECTURE%.exe
 echo.
 
 echo Done! You can find the executable in the dist folder.

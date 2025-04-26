@@ -47,7 +47,7 @@ There are two ways to use this application:
    - Install requirements
    - Build the executable
 
-3. Find `FileOrganizer.exe` in the `dist` folder
+3. Find `FileOrganizer-{OS}-{ARCH}.exe` in the `dist` folder
 
 ### 2. Using Python (For Developers)
 

@@ -1,6 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
+import os
+os_name = os.environ.get('OS', 'OSUnknown')[:3]
+arch = os.environ.get('PROCESSOR_ARCHITECTURE', '').lower()
+exe_name = f"FileOrganizer-{os_name}-{arch}"
 
 a = Analysis(
     ['main.py'],
@@ -26,7 +30,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='FileOrganizer',
+    name=exe_name,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
