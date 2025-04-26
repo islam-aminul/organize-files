@@ -1,0 +1,5 @@
+Pillow
+tqdm
+tk
+pytz
+pyinstaller
