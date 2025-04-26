@@ -1,34 +1,35 @@
 import logging
 import shutil
-import re
 from datetime import datetime
-from pathlib import Path
+
 from .base_processor import BaseProcessor
+
+
+def _get_document_type(file_path):
+    """Determine document type based on extension."""
+    ext = file_path.suffix.lower()
+
+    doc_types = {
+        '.pdf': 'Pdf',
+        '.doc': 'Word',
+        '.docx': 'Word',
+        '.xls': 'Excel',
+        '.xlsx': 'Excel',
+        '.ppt': 'Powerpoint',
+        '.pptx': 'Powerpoint',
+        '.txt': 'Text',
+        '.rtf': 'Text',
+        '.epub': 'Ebook',
+        '.mobi': 'Ebook'
+    }
+
+    return doc_types.get(ext, 'others')
+
 
 class DocumentProcessor(BaseProcessor):
     def __init__(self, output_dir, dedup_data, stats):
         super().__init__(output_dir, dedup_data, stats)
         self.documents_dir = self.output_dir / 'Documents'
-
-    def _get_document_type(self, file_path):
-        """Determine document type based on extension."""
-        ext = file_path.suffix.lower()
-        
-        doc_types = {
-            '.pdf': 'pdf',
-            '.doc': 'word',
-            '.docx': 'word',
-            '.xls': 'excel',
-            '.xlsx': 'excel',
-            '.ppt': 'powerpoint',
-            '.pptx': 'powerpoint',
-            '.txt': 'text',
-            '.rtf': 'text',
-            '.epub': 'ebook',
-            '.mobi': 'ebook'
-        }
-        
-        return doc_types.get(ext, 'others')
 
     def process(self, file_path):
         """Process document files."""
@@ -41,7 +42,7 @@ class DocumentProcessor(BaseProcessor):
                 return
             
             # Get document type
-            doc_type = self._get_document_type(file_path)
+            doc_type = _get_document_type(file_path)
             target_dir = self.documents_dir / doc_type
             target_dir.mkdir(parents=True, exist_ok=True)
             

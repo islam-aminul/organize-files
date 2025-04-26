@@ -1,9 +1,11 @@
-import shutil
-from pathlib import Path
 import logging
+import shutil
 from datetime import datetime
+
 from PIL import Image, ExifTags
+
 from .base_processor import BaseProcessor
+
 
 class ImageProcessor(BaseProcessor):
     def __init__(self, output_dir, dedup_data, stats):

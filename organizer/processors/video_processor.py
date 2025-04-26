@@ -1,10 +1,11 @@
+import json
 import logging
 import shutil
-import json
 import subprocess
 from datetime import datetime
-from pathlib import Path
+
 from .base_processor import BaseProcessor
+
 
 class VideoProcessor(BaseProcessor):
     def __init__(self, output_dir, dedup_data, stats):
@@ -36,7 +37,7 @@ class VideoProcessor(BaseProcessor):
                 if field in format_tags:
                     datetime_str = format_tags[field]
                     break
-            
+
             if datetime_str:
                 try:
                     # Try different date formats
@@ -52,7 +53,7 @@ class VideoProcessor(BaseProcessor):
                     dt = datetime.fromtimestamp(video_path.stat().st_ctime)
             else:
                 dt = datetime.fromtimestamp(video_path.stat().st_ctime)
-            
+
             # Add timezone info
             dt = self._localize_datetime(dt)
             
@@ -97,8 +98,8 @@ class VideoProcessor(BaseProcessor):
             metadata = self._extract_video_metadata(file_path)
             
             # Check if this is a motion photo (duration less than 5 seconds)
-            is_motion_photo = metadata['duration'] > 0 and metadata['duration'] < 5.0
-            
+            is_motion_photo = 0 < metadata['duration'] < 5.0
+
             if is_motion_photo:
                 target_dir = self.videos_dir / 'MotionPhotos'
             else:

@@ -1,10 +1,9 @@
-import os
-import shutil
 import hashlib
-import logging
-import pytz
+from datetime import timezone
 from pathlib import Path
-from datetime import datetime, timezone
+
+import pytz
+
 
 class BaseProcessor:
     def __init__(self, output_dir, dedup_data, stats):

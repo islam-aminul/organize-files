@@ -1,8 +1,9 @@
 import logging
 import shutil
 from datetime import datetime
-from pathlib import Path
+
 from .base_processor import BaseProcessor
+
 
 class AudioProcessor(BaseProcessor):
     def __init__(self, output_dir, dedup_data, stats):

@@ -1,9 +1,11 @@
-import logging
 import json
+import logging
 import mimetypes
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 from tqdm import tqdm
+
 try:
     # When running as part of the package
     from .processors import (
@@ -21,6 +23,19 @@ except ImportError:
         DocumentProcessor
     )
 
+
+def _get_file_type(file_path):
+    """Determine file type using mimetypes."""
+    try:
+        mime_type, _ = mimetypes.guess_type(str(file_path))
+        if mime_type:
+            return mime_type.split('/')[0]
+        return None
+    except Exception as e:
+        logging.error(f"Error determining file type for {file_path}: {str(e)}")
+        return None
+
+
 class FileOrganizer:
     def __init__(self, input_dir, output_dir):
         self.input_dir = Path(input_dir)
@@ -28,20 +43,21 @@ class FileOrganizer:
         self.stats = {
             'total_files': 0,
             'errors': 0,
-            'images': {'total': 0, 'copied': 0, 'exported': 0, 'no_exif': 0, 'duplicates': 0, 'skipped': 0, 'errors': 0},
+            'images': {'total': 0, 'copied': 0, 'exported': 0, 'no_exif': 0, 'duplicates': 0, 'skipped': 0,
+                       'errors': 0},
             'videos': {'total': 0, 'copied': 0, 'duplicates': 0, 'skipped': 0, 'errors': 0},
             'audios': {'total': 0, 'copied': 0, 'duplicates': 0, 'skipped': 0, 'errors': 0},
             'documents': {'total': 0, 'copied': 0, 'duplicates': 0, 'skipped': 0, 'errors': 0},
             'unknown': {'total': 0, 'skipped': 0}
         }
-        
+
         # Create necessary directories
         self._create_directory_structure()
-        
+
         # Initialize deduplication dataset
         self.dedup_file = self.output_dir / 'dedup_dataset.json'
         self.dedup_data = self._load_dedup_dataset()
-        
+
         # Initialize processors
         self.processors = {
             'image': ImageProcessor(output_dir, self.dedup_data, self.stats),
@@ -49,7 +65,7 @@ class FileOrganizer:
             'audio': AudioProcessor(output_dir, self.dedup_data, self.stats),
             'application': DocumentProcessor(output_dir, self.dedup_data, self.stats)
         }
-        
+
         # Setup logging with timestamp in filename
         log_timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         self.log_file = self.output_dir / f'organize_files_{log_timestamp}.log'
@@ -84,17 +100,6 @@ class FileOrganizer:
         with open(self.dedup_file, 'w') as f:
             json.dump(self.dedup_data, f, indent=4)
 
-    def _get_file_type(self, file_path):
-        """Determine file type using mimetypes."""
-        try:
-            mime_type, _ = mimetypes.guess_type(str(file_path))
-            if mime_type:
-                return mime_type.split('/')[0]
-            return None
-        except Exception as e:
-            logging.error(f"Error determining file type for {file_path}: {str(e)}")
-            return None
-
     def organize(self):
         """Main function to organize files."""
         try:
@@ -102,10 +107,10 @@ class FileOrganizer:
                 try:
                     if not file_path.is_file() or file_path.name.startswith('.'):
                         continue
-                    
+
                     self.stats['total_files'] += 1
-                    file_type = self._get_file_type(file_path)
-                
+                    file_type = _get_file_type(file_path)
+
                     if file_type in self.processors:
                         self.processors[file_type].process(file_path)
                     else:
@@ -115,9 +120,9 @@ class FileOrganizer:
                 except Exception as e:
                     logging.error(f"Error processing file {file_path}: {str(e)}")
                     self.stats['errors'] += 1
-            
+
             self._save_dedup_dataset()
-            
+
         except Exception as e:
             logging.error(f"Error in organize: {str(e)}")
 
