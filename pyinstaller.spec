@@ -2,7 +2,7 @@
 
 block_cipher = None
 import os
-os_name = os.environ.get('OS', 'OSUnknown')[:3]
+os_name = os.environ.get('OS', 'OSUnknown')[:3].lower()
 arch = os.environ.get('PROCESSOR_ARCHITECTURE', '').lower()
 exe_name = f"FileOrganizer-{os_name}-{arch}"
 
@@ -37,7 +37,7 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

@@ -34,6 +34,8 @@ def print_stats(stats):
         print(f"  Errors: {stats[category]['errors']}")
 
 def main():
+    # Set console window title
+    os.system(f"title FileOrganizer-{os.getenv('OS','OSUnknown')[:3]}-{os.getenv('PROCESSOR_ARCHITECTURE','').lower()}")
     # Get input directory
     input_dir = select_directory('Select Input Directory')
     if not input_dir:
@@ -56,11 +58,13 @@ def main():
         root = tk.Tk()
         root.withdraw()
         messagebox.showinfo('Complete', 'File organization completed.')
+        input("Press Enter to exit...")
         
     except Exception as e:
         root = tk.Tk()
         root.withdraw()
         messagebox.showerror('Error', f'An error occurred: {str(e)}')
+        input("Press Enter to exit...")
 
 if __name__ == '__main__':
     main()

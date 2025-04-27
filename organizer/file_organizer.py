@@ -3,7 +3,7 @@ import logging
 import mimetypes
 from datetime import datetime
 from pathlib import Path
-
+import sys
 from tqdm import tqdm
 
 try:
@@ -103,7 +103,12 @@ class FileOrganizer:
     def organize(self):
         """Main function to organize files."""
         try:
-            for file_path in tqdm(list(self.input_dir.rglob('*'))):
+            iterator = list(self.input_dir.rglob('*'))
+            try:
+                console = sys.stderr.isatty()
+            except Exception:
+                console = False
+            for file_path in tqdm(iterator, disable=not console):
                 try:
                     if not file_path.is_file() or file_path.name.startswith('.'):
                         continue

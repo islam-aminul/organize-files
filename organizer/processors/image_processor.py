@@ -89,9 +89,9 @@ class ImageProcessor(BaseProcessor):
                 width, height = img.size
                 if width > 3840 or height > 2160:
                     ratio = min(3840/width, 2160/height)
-                    new_size = (int(width * ratio), int(height * ratio))
+                    width, height = (int(width * ratio), int(height * ratio))
                 
-                img.convert('RGB').resize(new_size).save(export_path, 'JPEG', exif=img.getexif(), optimize=True)
+                img.convert('RGB').resize((width, height)).save(export_path, 'JPEG', exif=img.getexif(), optimize=True)
                 self.stats['images']['exported'] += 1
                 
         except Exception as e:
