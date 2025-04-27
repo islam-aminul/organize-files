@@ -5,25 +5,71 @@ from datetime import datetime
 from .base_processor import BaseProcessor
 
 
+doc_types = {
+    # PDF
+    '.pdf': 'PDF',
+    # Word documents
+    '.doc': 'Word',
+    '.docx': 'Word',
+    '.docm': 'Word',
+    '.dot': 'Word',
+    '.dotx': 'Word',
+    '.dotm': 'Word',
+    '.rtf': 'Word',
+    '.odt': 'Word',
+    '.ott': 'Word',
+    '.pages': 'Word',
+    '.wpd': 'Word',
+    # Spreadsheets
+    '.xls': 'Spreadsheet',
+    '.xlsx': 'Spreadsheet',
+    '.xlsm': 'Spreadsheet',
+    '.xlsb': 'Spreadsheet',
+    '.csv': 'Spreadsheet',
+    '.ods': 'Spreadsheet',
+    '.numbers': 'Spreadsheet',
+    # Presentations
+    '.ppt': 'Presentation',
+    '.pptx': 'Presentation',
+    '.pptm': 'Presentation',
+    '.pps': 'Presentation',
+    '.ppsx': 'Presentation',
+    '.ppsm': 'Presentation',
+    '.odp': 'Presentation',
+    '.key': 'Presentation',
+    # Web content
+    '.html': 'Web',
+    '.htm': 'Web',
+    '.xhtml': 'Web',
+    '.mht': 'Web',
+    '.mhtml': 'Web',
+    # E-books
+    '.epub': 'eBook',
+    '.mobi': 'eBook',
+    '.azw': 'eBook',
+    '.azw3': 'eBook',
+    '.fb2': 'eBook',
+    '.lit': 'eBook',
+    '.kf8': 'eBook',
+    '.pdb': 'eBook',
+    '.djvu': 'eBook',
+    # Plain text
+    '.txt': 'Text',
+    '.md': 'Text',
+    '.markdown': 'Text',
+    '.rst': 'Text',
+    '.log': 'Text',
+    '.xml': 'Text',
+    '.json': 'Text',
+    '.yaml': 'Text',
+    '.yml': 'Text',
+    '.tex': 'Text'
+}
+
+
 def _get_document_type(file_path):
     """Determine document type based on extension."""
-    ext = file_path.suffix.lower()
-
-    doc_types = {
-        '.pdf': 'Pdf',
-        '.doc': 'Word',
-        '.docx': 'Word',
-        '.xls': 'Excel',
-        '.xlsx': 'Excel',
-        '.ppt': 'Powerpoint',
-        '.pptx': 'Powerpoint',
-        '.txt': 'Text',
-        '.rtf': 'Text',
-        '.epub': 'Ebook',
-        '.mobi': 'Ebook'
-    }
-
-    return doc_types.get(ext, 'others')
+    return _doc_types.get(file_path.suffix.lower(), 'Others')
 
 
 class DocumentProcessor(BaseProcessor):
